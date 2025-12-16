@@ -6,7 +6,7 @@ const questions = [
     question: "What does CPU stand for?",
     correct_answer: "Central Processing Unit",
     incorrect_answers: ["Central Process Unit", "Computer Personal Unit", "Central Processor Unit"],
-    countdownSecondi: 60,
+    countdownSecondi: 5,
   },
   {
     category: "Science: Computers",
@@ -15,7 +15,7 @@ const questions = [
     question: "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn&#039;t get modified?",
     correct_answer: "Final",
     incorrect_answers: ["Static", "Private", "Public"],
-    countdownSecondi: 40,
+    countdownSecondi: 10,
   },
   {
     category: "Science: Computers",
@@ -24,11 +24,13 @@ const questions = [
     question: "The logo for Snapchat is a Bell.",
     correct_answer: "False",
     incorrect_answers: ["True"],
-    countdownSecondi: 60,
+    countdownSecondi: 5,
   },
 ];
 
 let indiceDomandaAttuale = 0;
+let ultimoSetInterval = null
+
 
 // questo viene triggerato quando la pagina si carica
 window.addEventListener("load", () => {
@@ -65,7 +67,9 @@ const passaAProssimaDomanda = function () {
   //   TODO: fare meccanismo timer
   // aggiornare l'elemento html interessato ad ogni
 
-  //  attivaCountdownUI();
+   attivaTimerUI({
+     countdownSecondi: prossimaDomanda.countdownSecondi
+   });
 
   // verifica che le domande non siano già arrivate alla fine
   // if () {
@@ -76,6 +80,37 @@ const passaAProssimaDomanda = function () {
   aggiornaNumeroDomandeUI(indiceDomandaAttuale);
 };
 
+
+
+function attivaTimerUI({ countdownSecondi }) {
+    const timerEl = document.querySelector("header > .right > .timer")
+    let nuovoTempo = countdownSecondi
+
+    // questa funzionalità permette di pulire il setInterval precedente,
+    // questo evita il problema di setInterval che si "accavallano"
+    clearInterval(ultimoSetInterval)
+    
+    const intervalloTempo = () => {
+        timerEl.textContent = nuovoTempo
+        nuovoTempo = nuovoTempo - 1
+        // verifica se il tempo arriva allo zero
+        // se si, passa alla prossima domanda
+        const eTempoAZero = nuovoTempo === 0
+        if (eTempoAZero) {
+            passaAProssimaDomanda()
+        }
+    }
+
+    // problema: setInterval continua all'infinito, invece dovrebbe
+    // resettarsi ogni volta che si passa ad una nuova domanda
+
+    // salva l'ultimo setInterval così potrai cancellare l'esecuzione
+    // della funzione che c'era all'interno
+    ultimoSetInterval = setInterval(() => {
+        intervalloTempo()
+    }, 1000)
+
+}
 
 
 function aggiornaNumeroDomandeUI(indiceDomandaAttuale) {

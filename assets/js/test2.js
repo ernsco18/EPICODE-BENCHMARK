@@ -15,15 +15,15 @@ const selettoreCssSecondiRimasti = "header > .contenitore > span.timer";
 // INPUT
 // devo avere un selettore css in cui iniettare/aggiornare
 // il contenuto
-// parametro = input
-const attivaCountdownUIIn = function ({ countdownSecondi }) {
-  // vado a prendere il node html dei "secondi rimasti"
-  const secondiRimastiEl = document.querySelector(selettoreCssSecondiRimasti);
-  // calcoli i secondi rimanenti
-  const secondiRimanenti = calcolaSecondiRimanenti(countdownSecondi);
-  // aggiorno il testo dei "secondi rimasti" con i secondi rimanenti
-  secondiRimastiEl.innerText = secondiRimanenti;
-};
+// // parametro = input
+// const attivaCountdownUIIn = function ({ countdownSecondi }) {
+//   // vado a prendere il node html dei "secondi rimasti"
+//   const secondiRimastiEl = document.querySelector(selettoreCssSecondiRimasti);
+//   // calcoli i secondi rimanenti
+//   const secondiRimanenti = calcolaSecondiRimanenti(countdownSecondi);
+//   // aggiorno il testo dei "secondi rimasti" con i secondi rimanenti
+//   secondiRimastiEl.innerText = secondiRimanenti;
+// };
 
 /**
  * Ritorna un intero che rappresenta il numero di secondi rimanenti

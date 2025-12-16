@@ -50,3 +50,25 @@ span {
   letter-spacing: 2px;
   font-weight: 500;
 }
+
+
+header {
+  display: flex;
+  justify-content: space-around;
+  flex: 1;
+  color: white;
+}
+
+header > .left {
+
+}
+
+
+header > .right {
+
+}
+
+
+header > .right > .timer {
+    font-size: 2rem;
+}
