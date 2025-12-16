@@ -91,14 +91,21 @@ function attivaTimerUI({ countdownSecondi }) {
     clearInterval(ultimoSetInterval)
     
     const intervalloTempo = () => {
-        timerEl.textContent = nuovoTempo
-        nuovoTempo = nuovoTempo - 1
         // verifica se il tempo arriva allo zero
         // se si, passa alla prossima domanda
         const eTempoAZero = nuovoTempo === 0
+
+        // se il tempo è a zero, passa alla prossima domanda
         if (eTempoAZero) {
             passaAProssimaDomanda()
         }
+        // altrimenti (se il timer è ancora attivo) aggiorna
+        // il timer nell'UI
+        else {
+            timerEl.textContent = nuovoTempo
+        }
+        // il nuovo tempo sarà il tempo attuale - 1 (secondo)
+        nuovoTempo = nuovoTempo - 1
     }
 
     // problema: setInterval continua all'infinito, invece dovrebbe
@@ -109,6 +116,8 @@ function attivaTimerUI({ countdownSecondi }) {
     ultimoSetInterval = setInterval(() => {
         intervalloTempo()
     }, 1000)
+
+    intervalloTempo()
 
 }
 
