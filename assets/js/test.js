@@ -6,7 +6,7 @@ const questions = [
     question: "What does CPU stand for?",
     correct_answer: "Central Processing Unit",
     incorrect_answers: ["Central Process Unit", "Computer Personal Unit", "Central Processor Unit"],
-    countdownSecondi: 80,
+    countdownSecondi: 20,
   },
   {
     category: "Science: Computers",
@@ -15,7 +15,7 @@ const questions = [
     question: "In the programming language Java, which of these keywords would you put on a variable to make sure it doesn&#039;t get modified?",
     correct_answer: "Final",
     incorrect_answers: ["Static", "Private", "Public"],
-    countdownSecondi: 80,
+    countdownSecondi: 10,
   },
   {
     category: "Science: Computers",
@@ -24,13 +24,13 @@ const questions = [
     question: "The logo for Snapchat is a Bell.",
     correct_answer: "False",
     incorrect_answers: ["True"],
-    countdownSecondi: 80,
+    countdownSecondi: 5,
   },
 ];
 
 let indiceDomandaAttuale = 0;
 let ultimoSetInterval = null;
-let ultimoSetIntervalCiambella = null
+let ultimoSetIntervalCiambella = null;
 
 // questo viene triggerato quando la pagina si carica
 window.addEventListener("load", () => {
@@ -84,6 +84,8 @@ const passaAProssimaDomanda = function (config = {}) {
     countdownSecondi: prossimaDomanda.countdownSecondi,
   });
 
+  initCiambella();
+
   // verifica che le domande non siano già arrivate alla fine
   // if () {
 
@@ -95,7 +97,7 @@ const passaAProssimaDomanda = function (config = {}) {
 
 function attivaTimerUI({ countdownSecondi }) {
   const timerEl = document.querySelector("header > .right > .timer > span");
-  let nuovoTempo = countdownSecondi;
+  let secondiRimasti = countdownSecondi;
 
   // questa funzionalità permette di pulire il setInterval precedente,
   // questo evita il problema di setInterval che si "accavallano"
@@ -104,7 +106,7 @@ function attivaTimerUI({ countdownSecondi }) {
   const intervalloTempo = () => {
     // verifica se il tempo arriva allo zero
     // se si, passa alla prossima domanda
-    const eTempoAZero = nuovoTempo === 0;
+    const eTempoAZero = secondiRimasti === 0;
 
     // se il tempo è a zero, passa alla prossima domanda
     if (eTempoAZero) {
@@ -113,10 +115,15 @@ function attivaTimerUI({ countdownSecondi }) {
     // altrimenti (se il timer è ancora attivo) aggiorna
     // il timer nell'UI
     else {
-      timerEl.textContent = nuovoTempo;
+      timerEl.textContent = secondiRimasti;
     }
     // il nuovo tempo sarà il tempo attuale - 1 (secondo)
-    nuovoTempo = nuovoTempo - 1;
+    secondiRimasti = secondiRimasti - 1;
+
+    aggiornaCiambella({
+      secondiTotali: countdownSecondi,
+      secondiRimasti: secondiRimasti,
+    });
   };
 
   // problema: setInterval continua all'infinito, invece dovrebbe
@@ -131,36 +138,52 @@ function attivaTimerUI({ countdownSecondi }) {
   intervalloTempo();
 }
 
-//ciambella timber
+function initCiambella() {
+  // console.log("inizializzato ciambella");
+  const ring = getCiambellaRingEl();
+  const CIRC = calcolaCIRC(48);
 
-function attivaCiambellaTimer() {
-  const ring = document.querySelector(".timer > .ringsvg > .ringprogress");
-  const CIRC = 100;
+  ring.style.strokeDasharray = CIRC;
+  ring.style.strokeDashoffset = 0;
 
-  function setRingProgress(progress) {
-    ring.style.strokeDashoffset = CIRC * (1 - progress);
-  }
-
-  let progress = 1;
-  setRingProgress(progress);
-
-  const eseguiOgniSecondo = function() {
-    // cancella l'esecuzione della funziona che aggiorna la ciambella 
-    clearInterval(ultimoSetIntervalCiambella)
-
-    progress += 1;
-    
-    if (progress <= 0) {
-      progress = 0;
-      clearInterval(ultimoSetIntervalCiambella);
-    }
-    setRingProgress(progress);
-  }
-
-  ultimoSetIntervalCiambella = setInterval(eseguiOgniSecondo, 1000);
-
+  return {
+    ring,
+    CIRC,
+  };
 }
 
+// ciambella timber
+function aggiornaCiambella({ secondiTotali, secondiRimasti }) {
+  const ring = getCiambellaRingEl();
+  const CIRC = calcolaCIRC(48);
+  const progress = secondiRimasti / secondiTotali;
+  ring.style.strokeDashoffset = CIRC * (1 - progress);
+}
+
+
+function getCiambellaRingEl() {
+  return document.querySelector(".timer > .ringsvg > .ringprogress");
+}
+
+function calcolaCIRC(radius) {
+  return 2 * Math.PI * radius;
+}
+
+// const CIRC = 283;
+
+// function setRingProgress(progress) {
+//   ring.style.strokeDashoffset = CIRC * (1 - progress);
+// }
+// let p = 1;
+// setRingProgress(p);
+// const id = setInterval(() => {
+//   p += 0.02;
+//   if (p <= 0) {
+//     p = 0;
+//     clearInterval(id);
+//   }
+//   setRingProgress(p);
+// }, 1000);
 
 function aggiornaNumeroDomandeUI(indiceDomandaAttuale) {
   const testoConNumDomanda = `QUESTION ${indiceDomandaAttuale} / ${questions.length}`;
