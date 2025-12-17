@@ -1,4 +1,4 @@
-const stelle = document.querySelectorAll(".stella");
+/* const stelle = document.querySelectorAll(".stella");
 let selectedRating = 0;
 
 function updateStars(value) {
@@ -21,3 +21,4 @@ stelle.forEach((star) => {
 document.querySelector(".valutazione").addEventListener("mouseleave", () => {
   updateStars(selectedRating);
 });
+ */
