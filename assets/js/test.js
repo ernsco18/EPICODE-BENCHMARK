@@ -94,41 +94,77 @@ const passaAProssimaDomanda = function (config = {}) {
 
 function attivaTimerUI({ countdownSecondi }) {
   const timerEl = document.querySelector("header > .right > .timer > span");
-  let nuovoTempo = countdownSecondi;
+  const ringEl = document.querySelector(".timer .ringprogress");
 
-  // questa funzionalità permette di pulire il setInterval precedente,
-  // questo evita il problema di setInterval che si "accavallano"
+  const r = 45;
+  const CIRC = 2 * Math.PI * r; // ~ 282.74 (meglio di 283 fisso)
+
+  ringEl.style.strokeDasharray = `${CIRC}`;
+
   clearInterval(ultimoSetInterval);
 
-  const intervalloTempo = () => {
-    // verifica se il tempo arriva allo zero
-    // se si, passa alla prossima domanda
-    const eTempoAZero = nuovoTempo === 0;
+  let tempoRimasto = countdownSecondi;
 
-    // se il tempo è a zero, passa alla prossima domanda
-    if (eTempoAZero) {
-      passaAProssimaDomanda();
-    }
-    // altrimenti (se il timer è ancora attivo) aggiorna
-    // il timer nell'UI
-    else {
-      timerEl.textContent = nuovoTempo;
-    }
-    // il nuovo tempo sarà il tempo attuale - 1 (secondo)
-    nuovoTempo = nuovoTempo - 1;
+  const setRingProgress = (progress01) => {
+    // clamp per sicurezza
+    const p = Math.max(0, Math.min(1, progress01));
+    ringEl.style.strokeDashoffset = CIRC * (1 - p);
   };
 
-  // problema: setInterval continua all'infinito, invece dovrebbe
-  // resettarsi ogni volta che si passa ad una nuova domanda
+  const tick = () => {
+    // aggiorna testo
+    timerEl.textContent = tempoRimasto;
 
-  // salva l'ultimo setInterval così potrai cancellare l'esecuzione
-  // della funzione che c'era all'interno
-  ultimoSetInterval = setInterval(() => {
-    intervalloTempo();
-  }, 1000);
+    // aggiorna ring sincronizzato col testo
+    setRingProgress(tempoRimasto / countdownSecondi);
 
-  intervalloTempo();
+    // fine tempo
+    if (tempoRimasto === 0) {
+      clearInterval(ultimoSetInterval);
+      passaAProssimaDomanda();
+      return;
+    }
+
+    tempoRimasto -= 1;
+  };
+
+  tick();
+  ultimoSetInterval = setInterval(tick, 1000);
 }
+let nuovoTempo = countdownSecondi;
+
+// questa funzionalità permette di pulire il setInterval precedente,
+// questo evita il problema di setInterval che si "accavallano"
+clearInterval(ultimoSetInterval);
+
+const intervalloTempo = () => {
+  // verifica se il tempo arriva allo zero
+  // se si, passa alla prossima domanda
+  const eTempoAZero = nuovoTempo === 0;
+
+  // se il tempo è a zero, passa alla prossima domanda
+  if (eTempoAZero) {
+    passaAProssimaDomanda();
+  }
+  // altrimenti (se il timer è ancora attivo) aggiorna
+  // il timer nell'UI
+  else {
+    timerEl.textContent = nuovoTempo;
+  }
+  // il nuovo tempo sarà il tempo attuale - 1 (secondo)
+  nuovoTempo = nuovoTempo - 1;
+};
+
+// problema: setInterval continua all'infinito, invece dovrebbe
+// resettarsi ogni volta che si passa ad una nuova domanda
+
+// salva l'ultimo setInterval così potrai cancellare l'esecuzione
+// della funzione che c'era all'interno
+ultimoSetInterval = setInterval(() => {
+  intervalloTempo();
+}, 1000);
+
+intervalloTempo();
 
 //ciambella timber
 
@@ -142,7 +178,7 @@ function attivaCiambellaTimer() {
   let p = 1;
   setRingProgress(p);
   const id = setInterval(() => {
-    p += 0.02;
+    p += 0.03;
     if (p <= 0) {
       p = 0;
       clearInterval(id);
