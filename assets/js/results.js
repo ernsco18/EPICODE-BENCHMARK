@@ -21,3 +21,17 @@ window.addEventListener("load", () => {
     },
   });
 });
+
+
+// LOGICA per mostrare il numero e percentuale di domande giuste e sbagliate
+// domande giuste = totale domande / numero domande giuste
+// domande sbagliate = totale domande / numero domande sbagliate
+
+// prendi parametri della query string sotto la proprietà "risultatiTest"
+
+const parametriUrl = new URLSearchParams(window.location.search);
+const risultatiTestStr = parametriUrl.get('risultatiTest');
+
+const risultatiTest = JSON.parse(risultatiTestStr)
+
+console.log(risultatiTest)
