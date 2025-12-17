@@ -53,7 +53,7 @@ function handleClickBottoneRisposta(ev) {
 }
 
 const passaAProssimaDomanda = function (config={}) {
-  const { bottonCliccatoEl } = config;
+  // const { bottonCliccatoEl } = config;
 
   // togli, da tutti gli elementi html che hanno la classa risposta-selected, la classa risposta-selected
   // document.querySelectorAll(".risposta-selected").forEach((el) => el.classList.remove("risposta-selected"));
