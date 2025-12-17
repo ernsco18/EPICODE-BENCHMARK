@@ -27,3 +27,11 @@ window.addEventListener("load", () => {
 // domande giuste = totale domande / numero domande giuste
 // domande sbagliate = totale domande / numero domande sbagliate
 
+// prendi parametri della query string sotto la proprietà "risultatiTest"
+
+const parametriUrl = new URLSearchParams(window.location.search);
+const risultatiTestStr = parametriUrl.get('risultatiTest');
+
+const risultatiTest = JSON.parse(risultatiTestStr)
+
+console.log(risultatiTest)
