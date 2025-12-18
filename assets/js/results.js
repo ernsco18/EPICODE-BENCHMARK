@@ -3,20 +3,31 @@ function main() {
     quandoPaginaCarica();
   });
 }
-main() 
-
+main();
 
 function quandoPaginaCarica() {
   const risultatiTest = ottieniRisultatiTestDaUrl();
   mostraRisultatiInGrafico(risultatiTest);
-  mostraPercentualiTesto(risultatiTest)
+  mostraPercentualiTesto(risultatiTest);
 }
-
 
 function mostraPercentualiTesto(risultatiTest) {
-  
-}
+  // prendi gli span interessati e popolali con le percentuali
+  // percentuale-domande-giuste
+  const spanPercentualeGiusteEl = document.getElementById("percentuale-domande-giuste");
+  const spanPercentualeSbagliateEl = document.getElementById("percentuale-domande-sbagliate");
 
+  const proporzioneGiuste = risultatiTest.totDomandeGiuste / risultatiTest.totDomande;
+  const percentualeGiuste = proporzioneGiuste * 100;
+  const percentualeGiusteArrotondata = parseFloat(percentualeGiuste.toFixed(2));
+
+  const proporzioneSbagliate = risultatiTest.totDomandeSbagliate / risultatiTest.totDomande;
+  const percentualeSbagliate = proporzioneSbagliate * 100;
+  const percentualeSbagliateArrotondata = parseFloat(percentualeSbagliate.toFixed(2));
+
+  spanPercentualeGiusteEl.innerText = `${percentualeGiusteArrotondata}%`;
+  spanPercentualeSbagliateEl.innerText = `${percentualeSbagliateArrotondata}%`
+}
 
 function mostraRisultatiInGrafico(risultatiTest) {
   // questa libreria non ha bisogno di un pre-calcolo
@@ -47,7 +58,6 @@ function mostraRisultatiInGrafico(risultatiTest) {
     });
   });
 }
-
 
 function ottieniRisultatiTestDaUrl() {
   // LOGICA per mostrare il numero e percentuale di domande giuste e sbagliate
