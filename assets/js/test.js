@@ -47,9 +47,20 @@ function addEventListeners() {
 }
 
 function handleClickBottoneRisposta(ev) {
-  passaAProssimaDomanda({
-    // bottonCliccatoEl: ev.target,
-  });
+  // rimuove la selezione da tutti i bottoni
+  document.querySelectorAll(".risposte .bottoni").forEach((btn) => btn.classList.remove("risposta-selected"));
+
+  // evidenzia SOLO il bottone cliccato
+  ev.target.classList.add("risposta-selected");
+
+  // passa alla prossima domanda dopo 500ms
+  setTimeout(() => {
+    passaAProssimaDomanda();
+  }, 500);
+}
+
+function resetSelezioneRisposte() {
+  document.querySelectorAll(".bottoni").forEach((btn) => btn.classList.remove("risposta-selected"));
 }
 
 const passaAProssimaDomanda = function (config = {}) {
@@ -72,7 +83,7 @@ const passaAProssimaDomanda = function (config = {}) {
   const prossimaDomanda = questions[indiceDomandaAttuale];
   //   incremento il contatore attuale
   indiceDomandaAttuale += 1;
-
+  resetSelezioneRisposte();
   aggiornaDomandaUI(prossimaDomanda);
 
   //   TODO: fare meccanismo timer
