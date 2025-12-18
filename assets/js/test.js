@@ -31,11 +31,15 @@ function handleClickBottoneRisposta(ev) {
 
   const rispostaGiustaReale = questions[indiceDomandaAttuale].correct_answer;
 
-  // console.log("indice domanda attuale: ", indiceProssimaDomanda);
-  // console.log("risposta cliccata da utente: ", rispostaCliccataDaUtente);
-  // console.log("risposta giusta reale: ", rispostaGiustaReale);
-
   const rispostaEGiusta = rispostaGiustaReale === rispostaCliccataDaUtente;
+
+  // attiva/disattiva questo per verificare come la risposta cliccata da utente
+  // corrisponde alla risposta giusta reale
+  console.log("indice domanda attuale: ", indiceProssimaDomanda);
+  console.log("risposta cliccata da utente: ", rispostaCliccataDaUtente);
+  console.log("risposta giusta reale: ", rispostaGiustaReale);
+  console.log("risposta giusta:", rispostaEGiusta ? "SI" : "NO");
+  console.log("-----------------------------------------------")
 
   if (rispostaEGiusta) {
     contatoreRisposteGiuste += 1;
@@ -67,7 +71,7 @@ const passaAProssimaDomanda = function (config = {}) {
   //   incremento il contatore attuale
   indiceProssimaDomanda += 1;
 
-  aggiornaDomandaUI(prossimaDomanda);
+  aggiornaDomandaERisposteUI(prossimaDomanda);
 
   //   TODO: fare meccanismo timer
   // aggiornare l'elemento html interessato ad ogni
@@ -207,12 +211,15 @@ function passaAPaginaRisultati() {
 //     incorrect_answers: ["Static", "Private", "Public"],
 //     countdownSecondi: 40,
 //   },
-function aggiornaDomandaUI(domandaObj) {
+function aggiornaDomandaERisposteUI(domandaObj) {
   // prendi l'html di interesse
   // html domanda
   const domandaEl = document.querySelector(".question > h1");
-  domandaEl.textContent = domandaObj.question;
+  // questo è un array di stringhe che contiene TUTTE le risposte
+  // di una data domanda
   const tutteRisposte = ottieniTutteRisposte(domandaObj);
+
+  domandaEl.textContent = domandaObj.question;
   let indiceRisposta = 0;
 
   const bottoniRisposteEl = document.querySelectorAll(".risposte > .bottoni");
@@ -233,10 +240,19 @@ function aggiornaDomandaUI(domandaObj) {
     secondoContenitoreRisposte.style.display = "block";
   }
 
-  tutteRisposte.forEach((testoRisposta) => {
+  // questo passo intermedio randomizza le risposte, cioè
+  // garantisce che la risposta giusta non sarà mai allo stesso indice
+  const tutteRisposteRandomizzate = randomizzaRisposte(tutteRisposte);
+
+  // itera per ogni risposta della data domanda, e presentala nell'interfaccia
+  tutteRisposteRandomizzate.forEach((testoRisposta) => {
     bottoniRisposteEl[indiceRisposta].textContent = testoRisposta;
     indiceRisposta += 1;
   });
+}
+
+function randomizzaRisposte(risposte) {
+  return shuffleArray(risposte);
 }
 
 // TODO: inserire funzionalità per randomizzare l'inserimento della risposta corretta
@@ -249,4 +265,12 @@ function ottieniTutteRisposte(domandaObj) {
 
 function haiTerminatoDomande() {
   return indiceProssimaDomanda === questions.length;
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // swap
+  }
+  return array;
 }
