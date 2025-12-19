@@ -14,7 +14,12 @@
       <div class="right">
         <canvas id="myChart" style="width: 100%; max-width: 600px"></canvas>
         <div class="timer ring">
-          <span></span>
+          <div class="timer-content">
+            <span class="timer-top">SECONDS</span>
+            <span class="timer-value"></span>
+            <span class="timer-bottom">REMAINING</span>
+          </div>
+
           <svg class="ringsvg" viewBox="0 0 100 100" aria-hidden="true">
             <circle class="ringprogress" cx="50" cy="50" r="45"></circle>
           </svg>

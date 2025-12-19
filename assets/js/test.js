@@ -104,7 +104,7 @@ const passaAProssimaDomanda = function (config = {}) {
 };
 
 function attivaTimerUI({ countdownSecondi }) {
-  const timerEl = document.querySelector("header > .right > .timer > span");
+  const timerEl = document.querySelector(".timer .timer-value");
   const ringEl = document.querySelector(".timer .ringprogress");
 
   const r = 45;
