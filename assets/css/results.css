@@ -66,6 +66,7 @@ button {
   font-weight: bold;
   margin-top: 0;
   text-align: center;
+  box-shadow: #00ffff 0px 0px 10px 0px;
 }
 form {
   text-align: center;
