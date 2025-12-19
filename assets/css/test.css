@@ -41,19 +41,24 @@ h1 {
 footer {
   margin-top: 100px;
   color: white;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 span {
   color: white;
+}
+#fine {
+  color: #d20094;
+  letter-spacing: 2px;
+  font-weight: 500;
 }
 .questionNumber {
   letter-spacing: 2px;
   font-weight: 500;
 }
-
 /* TODO: creare classe "risposta-selected" quando il bottone che contiene
 la risposta viene cliccata */
-
 .risposta-selected {
   background-color: #d20094;
 }
@@ -70,6 +75,8 @@ header > .right {
 header > .right > .timer {
   font-size: 2rem;
 }
+
+/* CONTENITORE DEL TIMER */
 .timer {
   width: 140px;
   height: 140px;
@@ -83,6 +90,7 @@ header > .right > .timer {
   justify-content: center;
   align-items: center;
 }
+
 .timer > .ring {
   width: 140px;
   height: 140px;
@@ -112,7 +120,7 @@ header > .right > .timer {
   stroke-dasharray: 283;
   stroke-dashoffset: 0;
 
-  transition: stroke-dashoffset 0.3s linear;
+  transition: stroke-dashoffset 0.2s linear;
 }
 .timer {
   position: relative;
@@ -123,7 +131,7 @@ header > .right > .timer {
 .timer-content {
   position: absolute;
   inset: 0;
-  z-index: 2; /* sopra l’svg */
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
